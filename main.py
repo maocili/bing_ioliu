@@ -8,12 +8,23 @@ def next_page(pg):
     return model.PAGE_URL+str(pg)
 
 def re_url(url):
+    '''
+    通过大图网页链接，通过正则得到图片标识
+    :param url:必应大图链接抵制
+    :return:返回一下可以下载的地址
+    '''
     pattern = re.compile('.*\?')
     img_url = pattern.search(url).group(0)[6:-1]+'_1920x1080.jpg'
     print(model.IMG_URL+img_url)
     return model.IMG_URL+img_url
 
 def get_img_items(list,start_page):
+    '''
+    获取页面中的img大图网页链接
+    :param list:用于存放大图网页链接
+    :param start_page:起始页
+    :return:在mian中的url_list中直接修改
+    '''
     html = requests.get(model.BASE_URL+start_page)
     html_etree = etree.HTML(html.text)
     list.append(html_etree.xpath('/html/body/div/div/div/a/@href'))
@@ -26,6 +37,12 @@ def get_img_items(list,start_page):
         return list
 
 def Downloads(url,title1):
+    '''
+    下载图片于跟目录下的img文件夹
+    :param url:下载地址 xxxx.jpg
+    :param title1:文件名称
+    :return:
+    '''
     data = requests.get(url,headers = model.header)
     # print(data)
     with open('img\\' + title1 + '.jpg','wb+') as f:
